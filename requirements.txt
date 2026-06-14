@@ -2,3 +2,4 @@ fastapi
 uvicorn
 HdRezkaApi
 requests
+curl_cffi
