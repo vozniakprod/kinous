@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moov | Streaming Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* === TOKENS & VARIABLES === */
+        :root {
+            /* Palette - Deep Zinc (No pure black #000000) */
+            --bg-base: #09090b; 
+            --bg-surface: #18181b;
+            --bg-pill: #27272a;
+            
+            --text-primary: #ffffff;
+            --text-muted: #a1a1aa;
+            
+            /* Typography */
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            
+            /* Geometry */
+            --radius-md: 12px;
+            --radius-pill: 999px;
+            
+            /* Spacing & Layout */
+            --px-layout: 4%;
+            --transition-fluid: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* === RESET === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { cursor: pointer; border: none; outline: none; font-family: inherit; background: none; }
+        img { display: block; max-width: 100%; object-fit: cover; }
+
+        /* === NAVIGATION === */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px var(--px-layout);
+            z-index: 100;
+            transition: var(--transition-fluid);
+        }
+
+        .navbar.scrolled {
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 16px var(--px-layout);
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left { gap: 48px; }
+        .nav-right { gap: 24px; }
+
+        /* Stylized Logo */
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
+        }
+        
+        .logo svg {
+            margin-right: 2px;
+            height: 24px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .icon-btn {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .icon-btn:hover { opacity: 0.7; }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* === SEARCH BAR === */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-pill);
+            padding: 6px 12px;
+            transition: var(--transition-fluid);
+        }
+
+        .search-wrapper:focus-within {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-icon {
+            color: var(--text-muted);
+            margin-right: 8px;
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            width: 120px;
+            outline: none;
+            font-family: inherit;
+            transition: width 0.3s ease;
+        }
+
+        .search-input:focus {
+            width: 200px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 300px;
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            max-height: 400px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition-fluid);
+            z-index: 1000;
+            scrollbar-width: none;
+        }
+
+        .search-dropdown::-webkit-scrollbar {
+            display: none;
+        }
+
+        .search-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .search-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .search-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-item img {
+            width: 40px;
+            height: 60px;
+            border-radius: 4px;
+            object-fit: cover;
+            background: #27272a;
+        }
+
+        .search-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .search-item-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .search-item-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .search-empty {
+            padding: 16px;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            max-height: 850px;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--px-layout);
+            isolation: isolate;
+            overflow: hidden; /* Fixes any inner layer spilling out */
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 70% 30%; /* Focus on right side characters */
+            transition: opacity 0.5s ease;
+        }
+
+        /* Scrims: Dark gradient left for text, dark gradient bottom to blend into page */
+        .hero-scrim {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: 
+                linear-gradient(90deg, var(--bg-base) 0%, rgba(9, 9, 11, 0.85) 35%, transparent 70%),
+                linear-gradient(0deg, var(--bg-base) 0%, transparent 25%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 480px;
+            margin-top: 40px; /* Offset to center optically below nav */
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 5vw, 4.25rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 16px;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: #d4d4d8; /* Slightly brighter than text-muted for readability */
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 440px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius-pill);
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition-fluid);
+        }
+
+        .btn:hover {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-base);
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* === HORIZONTAL FEEDS === */
+        .section {
+            padding: 0 0 40px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 0 var(--px-layout);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 20; /* Ensures header is clickable above scroller's transparent negative margin */
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .see-more {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .see-more:hover {
+            color: var(--text-primary);
+        }
+
+        .scroller {
+            display: flex;
+            gap: 12px;
+            padding: 32px 0 48px var(--px-layout); /* Right padding removed here to prevent browser clipping */
+            margin: -32px 0 -48px 0; /* Compensates the padding to keep original vertical spacing */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-padding-left: var(--px-layout);
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .scroller::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        
+        /* Modifiers added for JS drag */
+        .scroller.active {
+            cursor: grabbing;
+        }
+        
+        .scroller.dragging {
+            scroll-snap-type: none; /* Disable snap during drag */
+        }
+        
+        .scroller.dragging > * {
+            pointer-events: none; /* Prevent accidentally opening links while dragging */
+        }
+
+        /* Safe Right Padding fix for overflow containers */
+        .scroller::after {
+            content: '';
+            flex: 0 0 var(--px-layout);
+            display: block;
+        }
+
+        /* Standard Movie Card (2:3) */
+        .card-poster {
+            flex: 0 0 auto;
+            width: 170px;
+            aspect-ratio: 2 / 3;
+            border-radius: var(--radius-md);
+            background-color: var(--bg-surface);
+            overflow: hidden;
+            scroll-snap-align: start;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-poster img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-poster:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Filter Pills Row */
+        .filter-row {
+            margin: 16px 0 40px 0;
+            padding: 12px 0 12px var(--px-layout); /* Matches the same padding strategy */
+        }
+
+        .pill {
+            flex: 0 0 auto;
+            padding: 8px 20px;
+            border-radius: var(--radius-pill);
+            font-size: 0.875rem;
+            font-weight: 600;
+            background-color: var(--bg-pill);
+            color: var(--text-primary);
+            transition: var(--transition-fluid);
+        }
+
+        .pill:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .pill.active {
+            background-color: var(--text-primary);
+            color: var(--bg-base);
+        }
+
+        /* Continue Watching Card (Aspect ratio adapted to match reference) */
+        .card-continue {
+            flex: 0 0 auto;
+            width: 220px;
+            aspect-ratio: 3 / 4;
+            border-radius: var(--radius-md);
+            background-color: var(--bg-surface);
+            position: relative;
+            overflow: hidden;
+            scroll-snap-align: start;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-continue img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-continue:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Play Button Overlay */
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: var(--transition-fluid);
+            z-index: 2;
+        }
+
+        .card-continue:hover .play-overlay {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Progress Bar Overlay */
+        .progress-track {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 2;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #e50914; /* Netflix-style red progress */
+        }
+
+        /* Overlay Scrim for Continue Watching to make play button pop */
+        .continue-scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.75rem; }
+            .nav-links { display: none; }
+            .card-poster { width: 140px; }
+            .card-continue { width: 180px; }
+            .search-input { width: 100px; }
+            .search-input:focus { width: 140px; }
+            .search-dropdown { width: 260px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">
+                M
+            </a>
+        </div>
+        <div class="nav-right">
+            <div class="search-container" id="search-container">
+                <div class="search-wrapper">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-input" class="search-input" placeholder="Поиск..." autocomplete="off">
+                </div>
+                <div class="search-dropdown" id="search-dropdown">
+                    <!-- Results will be injected here via JS -->
+                </div>
+            </div>
+            <div class="avatar">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80" alt="User Profile">
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO SECTION -->
+        <header class="hero">
+            <div class="hero-bg">
+                <!-- ID добавлен для JS обновления -->
+                <img id="hero-bg-img" src="https://image.tmdb.org/t/p/original/9SE5GjQvzQ2YtqM6fT0F352Zk1I.jpg" alt="Backdrop">
+            </div>
+            
+            <div class="hero-scrim"></div>
+            
+            <div class="hero-content">
+                <!-- ID добавлены для JS обновления -->
+                <h1 class="hero-title" id="hero-title">Monsters, INC.</h1>
+                <p class="hero-desc" id="hero-desc">Animated film that explores the world of Monstropolis, where monsters generate their city's power by scaring children at night.</p>
+                
+                <div class="hero-actions">
+                    <button id="hero-play-btn" class="btn btn-primary">
+                        Смотреть 
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l14 9-14 9V3z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- SECTION 1: TRENDING MOVIES -->
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Популярные фильмы
+                </h2>
+            </header>
+            <!-- ID добавлен для рендера -->
+            <div class="scroller" id="scroller-trending">
+                <!-- Карточки будут добавлены через JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: CONTINUE WATCHING -->
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Продолжить просмотр</h2>
+            </header>
+            <!-- ID добавлен для рендера -->
+            <div class="scroller" id="scroller-continue">
+                <!-- Карточки будут добавлены через JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: LOWER TRENDING Series -->
+        <section class="section" style="padding-bottom: 80px;">
+            <header class="section-header">
+                <h2 class="section-title">Популярные сериалы</h2>
+            </header>
+            <!-- ID добавлен для рендера -->
+            <div class="scroller" id="scroller-lower">
+                <!-- Карточки будут добавлены через JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Прозрачность навбара при скролле
+            const navbar = document.getElementById('navbar');
+            
+            const handleScroll = () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+
+            // Мышиный Drag & Drop Scroll для десктопа
+            const scrollers = document.querySelectorAll('.scroller');
+            scrollers.forEach(scroller => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+                let isDragging = false;
+
+                scroller.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    isDragging = false;
+                    scroller.classList.add('active');
+                    startX = e.pageX - scroller.offsetLeft;
+                    scrollLeft = scroller.scrollLeft;
+                });
+
+                scroller.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    scroller.classList.remove('active');
+                    scroller.classList.remove('dragging');
+                });
+
+                scroller.addEventListener('mouseup', () => {
+                    isDown = false;
+                    scroller.classList.remove('active');
+                    setTimeout(() => scroller.classList.remove('dragging'), 0); // Убираем с задержкой, чтобы не прошел случайный клик
+                });
+
+                scroller.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault(); 
+                    const x = e.pageX - scroller.offsetLeft;
+                    const walk = (x - startX) * 1.5; // Скорость скролла
+                    if (Math.abs(walk) > 5) {
+                        isDragging = true;
+                        scroller.classList.add('dragging');
+                    }
+                    scroller.scrollLeft = scrollLeft - walk;
+                });
+
+                // Блокируем переход по ссылкам при перетаскивании
+                scroller.addEventListener('click', (e) => {
+                    if (isDragging) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }, { capture: true });
+            });
+
+            // TMDB API Integration
+            const API_KEY = '7539d217b1aa60938af6dacbb3feb31c';
+            const BASE_URL = 'https://api.themoviedb.org/3';
+            const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
+            const IMG_ORIGINAL = 'https://image.tmdb.org/t/p/original';
+
+            // --- Логика поиска ---
+            const searchInput = document.getElementById('search-input');
+            const searchDropdown = document.getElementById('search-dropdown');
+            const searchContainer = document.getElementById('search-container');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                
+                clearTimeout(searchTimeout);
+                
+                if (query.length < 2) {
+                    searchDropdown.classList.remove('active');
+                    return;
+                }
+
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&language=ru-RU&query=${encodeURIComponent(query)}&page=1`);
+                        const data = await response.json();
+                        
+                        searchDropdown.innerHTML = '';
+                        
+                        if (data.results && data.results.length > 0) {
+                            // Ограничиваем вывод до 5 результатов
+                            data.results.slice(0, 5).forEach(movie => {
+    // 1. Игнорируем людей, если они попали в поиск (актеры/режиссеры)
+    if (movie.media_type === 'person') return;
+
+    // 2. Определяем правильное название (у сериалов это 'name', у фильмов 'title')
+    const title = movie.title || movie.name || 'Без названия';
+    
+    // 3. Вытаскиваем правильный год (у сериалов 'first_air_date', у фильмов 'release_date')
+    const dateField = movie.release_date || movie.first_air_date;
+    const year = dateField ? dateField.split('-')[0] : '—';
+    
+    // 4. Плейсхолдер для постера
+    const poster = movie.poster_path 
+        ? `${IMG_W500}${movie.poster_path}` 
+        : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI2MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjcyNzJhIi8+PC9zdmc+';
+    
+    // 5. Генерируем ссылку, передавая ID и TYPE контента (movie или tv)
+    searchDropdown.innerHTML += `
+        <a href="movie.html?id=${movie.id}&type=${movie.media_type}" class="search-item">
+            <img src="${poster}" alt="${title}">
+            <div class="search-item-info">
+                <span class="search-item-title">${title}</span>
+                <span class="search-item-date">${year}</span>
+            </div>
+        </a>
+    `;
+});
+                        } else {
+                            searchDropdown.innerHTML = `<div class="search-empty">Ничего не найдено</div>`;
+                        }
+                        
+                        searchDropdown.classList.add('active');
+                    } catch (error) {
+                        console.error('Search error:', error);
+                    }
+                }, 400); // 400мс задержки перед отправкой (чтобы не дергать API на каждую букву)
+            });
+
+            // Закрываем поиск при клике вне него
+            document.addEventListener('click', (e) => {
+                if (!searchContainer.contains(e.target)) {
+                    searchDropdown.classList.remove('active');
+                }
+            });
+            
+            // Открываем обратно при клике на input (если есть введенный текст)
+            searchInput.addEventListener('focus', () => {
+                if (searchInput.value.trim().length >= 2) {
+                    searchDropdown.classList.add('active');
+                }
+            });
+            // --- Конец логики поиска ---
+
+            // Функция для запросов к API
+            async function fetchTMDB(endpoint) {
+                try {
+                    const response = await fetch(`${BASE_URL}${endpoint}?api_key=${API_KEY}&language=ru-RU`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching data from TMDB:', error);
+                    return { results: [] };
+                }
+            }
+
+            // Инициализация загрузки данных
+            async function initApp() {
+                // Делаем параллельные запросы для скорости
+                const [trending, popular, topRated] = await Promise.all([
+                    fetchTMDB('/trending/movie/week'),
+                    fetchTMDB('/movie/popular'),
+                    fetchTMDB('/tv/top_rated')
+                ]);
+
+                // 1. Обновляем Hero-блок (первый трендовый фильм)
+                if (trending.results && trending.results.length > 0) {
+                    const heroMovie = trending.results[0];
+                    const heroBg = document.getElementById('hero-bg-img');
+                    const heroTitle = document.getElementById('hero-title');
+                    const heroDesc = document.getElementById('hero-desc');
+
+                    // Плавное обновление картинки
+                    heroBg.style.opacity = 0;
+                    setTimeout(() => {
+                        if(heroMovie.backdrop_path) {
+                            heroBg.src = `${IMG_ORIGINAL}${heroMovie.backdrop_path}`;
+                        }
+                        heroBg.alt = heroMovie.title;
+                        heroBg.style.opacity = 1;
+                    }, 200);
+
+                    heroTitle.textContent = heroMovie.title || heroMovie.name;
+                    // Ограничиваем длину синопсиса, чтобы не ломать верстку
+                    heroDesc.textContent = heroMovie.overview.length > 200 
+                        ? heroMovie.overview.substring(0, 200) + '...' 
+                        : heroMovie.overview;
+                    const heroPlayBtn = document.getElementById('hero-play-btn'); 
+
+if (heroPlayBtn) {
+    heroPlayBtn.onclick = () => {
+        window.location.href = `movie.html?id=${heroMovie.id}+&type=${heroMovie.media_type || 'movie'}`;
+    };
+}    
+                }
+
+
+                // 2. Обновляем первый скроллер "Trending Movies"
+                const scrollerTrending = document.getElementById('scroller-trending');
+                if (scrollerTrending && trending.results) {
+                    scrollerTrending.innerHTML = ''; // Очищаем скелеты/плейсхолдеры
+                    trending.results.slice(1, 10).forEach(movie => {
+                        if (movie.poster_path) {
+                            scrollerTrending.innerHTML += `
+    <div class="card-poster" title="${movie.title}" onclick="window.location.href='movie.html?id=${movie.id}+&type=movie'" style="cursor: pointer;">
+        <img src="${IMG_W500}${movie.poster_path}" alt="${movie.title}">
+    </div>
+`;
+                        }
+                    });
+                }
+
+                // 3. Обновляем скроллер "Continue Watching"
+                const scrollerContinue = document.getElementById('scroller-continue');
+                if (scrollerContinue && popular.results) {
+                    scrollerContinue.innerHTML = '';
+                    popular.results.slice(0, 8).forEach(movie => {
+                        if (movie.poster_path) {
+                            // Рандомный прогресс бар для имитации просмотра
+                            const randomProgress = Math.floor(Math.random() * 60) + 20; 
+                            const videoType = movie.media_type || 'movie'; // На всякий случай, если придет без типа
+                            scrollerContinue.innerHTML += `
+    <div class="card-continue" title="${movie.title}" onclick="window.location.href='movie.html?id=${movie.id}+&type=${movie.media_type}'" style="cursor: pointer;">
+        <img src="${IMG_W500}${movie.poster_path}" alt="${movie.title}">
+        <div class="continue-scrim"></div>
+        <div class="play-overlay">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 2px;"><path d="M5 3l14 9-14 9V3z"/></svg>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" style="width: ${randomProgress}%;"></div>
+        </div>
+    </div>
+`;
+                        }
+                    });
+                }
+
+                // 4. Обновляем нижний скроллер "Trending Series"
+                const scrollerLower = document.getElementById('scroller-lower');
+                if (scrollerLower && topRated.results) {
+                    scrollerLower.innerHTML = '';
+                    topRated.results.slice(0, 10).forEach(movie => {
+                        if (movie.poster_path) {
+                            scrollerLower.innerHTML += `
+    <div class="card-poster" title="${movie.title}" onclick="window.location.href='movie.html?id=${movie.id}+&type=tv'" style="cursor: pointer;">
+        <img src="${IMG_W500}${movie.poster_path}" alt="${movie.title}">
+    </div>
+`;
+                        }
+                    });
+                }
+            }
+
+            // Запускаем
+            initApp();
+        });
+    </script>
+</body>
+</html>
