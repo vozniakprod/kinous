@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Загрузка... | Moov</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         /* === TOKENS & VARIABLES === */
         :root {
             /* Palette - Deep Zinc */
-            --bg-base: #09090b; 
+            --bg-base: #09090b;
             --bg-surface: #18181b;
             --bg-pill: #27272a;
-            
+
             --text-primary: #ffffff;
             --text-muted: #a1a1aa;
-            
+
             /* Typography */
             --font-main: 'Plus Jakarta Sans', sans-serif;
-            
+
             /* Geometry */
             --radius-md: 12px;
             --radius-pill: 999px;
-            
+
             /* Spacing & Layout */
             --px-layout: 4%;
             --transition-fluid: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* === RESET === */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: var(--font-main);
@@ -42,10 +50,28 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        button { cursor: pointer; border: none; outline: none; font-family: inherit; background: none; }
-        img { display: block; max-width: 100%; object-fit: cover; }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            background: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            object-fit: cover;
+        }
 
 
         /* === SEARCH BAR === */
@@ -187,8 +213,12 @@
         /* === NAVIGATION === */
         .navbar {
             position: fixed;
-            top: 0; left: 0; width: 100%;
-            display: flex; justify-content: space-between; align-items: center;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 24px var(--px-layout);
             z-index: 100;
             transition: var(--transition-fluid);
@@ -201,46 +231,93 @@
             padding: 16px var(--px-layout);
         }
 
-        .nav-left, .nav-right { display: flex; align-items: center; }
-        .nav-left { gap: 48px; }
-        .nav-right { gap: 24px; }
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left {
+            gap: 48px;
+        }
+
+        .nav-right {
+            gap: 24px;
+        }
 
         .logo {
-            font-size: 1.75rem; font-weight: 800; letter-spacing: -0.04em;
-            display: flex; align-items: center; color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
         }
-        
-        .logo svg { margin-right: 2px; height: 24px; width: auto; }
 
-        .nav-links { display: flex; gap: 32px; }
-        .nav-link { font-size: 0.875rem; font-weight: 600; color: var(--text-muted); transition: color 0.2s ease; }
-        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .logo svg {
+            margin-right: 2px;
+            height: 24px;
+            width: auto;
+        }
 
-        .icon-btn { color: var(--text-primary); display: flex; align-items: center; justify-content: center; transition: opacity 0.2s ease; }
-        .icon-btn:hover { opacity: 0.7; }
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .icon-btn {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            opacity: 0.7;
+        }
 
         .avatar {
-            width: 32px; height: 32px; border-radius: var(--radius-pill);
-            overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-pill);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* === MOVIE PAGE LAYOUT === */
         .movie-page {
             position: relative;
             min-height: 100vh;
-            padding-top: 100px; /* Отступ под навигацию */
+            padding-top: 100px;
+            /* Отступ под навигацию */
         }
 
         /* Ambient Background Blur */
         .backdrop-blur {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 70vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70vh;
             background-size: cover;
             background-position: center;
             opacity: 0.8;
             filter: blur(50px);
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
             z-index: -1;
             transition: background-image 0.5s ease;
         }
@@ -257,7 +334,8 @@
         /* === PLAYER SECTION === */
         .player-section {
             flex: 1;
-            min-width: 0; /* Фикс для Grid/Flex box overflows */
+            min-width: 0;
+            /* Фикс для Grid/Flex box overflows */
         }
 
         .video-wrapper {
@@ -307,8 +385,8 @@
             overflow: hidden;
             background-color: var(--bg-surface);
             margin-bottom: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .info-title {
@@ -333,7 +411,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            color: #f5c518; /* Цвет звезды IMDb */
+            color: #f5c518;
+            /* Цвет звезды IMDb */
             background: rgba(245, 197, 24, 0.1);
             padding: 4px 8px;
             border-radius: 6px;
@@ -388,7 +467,7 @@
             border-radius: 50%;
             object-fit: cover;
             background-color: var(--bg-surface);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .cast-info {
@@ -411,32 +490,57 @@
         /* TV Series Section */
         .tv-section {
             margin-top: 32px;
-            display: none; /* Скрыт по умолчанию, пока не проверим тип tv */
+            display: none;
+            /* Скрыт по умолчанию, пока не проверим тип tv */
         }
+
         .tv-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .tv-header h3 {
             font-size: 1.5rem;
             font-weight: 700;
         }
+
         .season-select {
+            appearance: none;
+            -webkit-appearance: none;
             background-color: var(--bg-surface);
             color: var(--text-primary);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 40px 10px 16px;
             border-radius: var(--radius-md);
             font-family: inherit;
             font-size: 0.95rem;
             cursor: pointer;
             outline: none;
+            transition: var(--transition-fluid);
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23a1a1aa%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
         }
+
+        .season-select:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
         .season-select:focus {
-            border-color: rgba(255,255,255,0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
+
+        .season-select option {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 12px;
+        }
+
         .episodes-list {
             display: flex;
             flex-direction: column;
@@ -445,22 +549,35 @@
             overflow-y: auto;
             padding-right: 8px;
         }
-        .episodes-list::-webkit-scrollbar { width: 6px; }
-        .episodes-list::-webkit-scrollbar-track { background: transparent; }
-        .episodes-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: var(--radius-pill); }
+
+        .episodes-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .episodes-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .episodes-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-pill);
+        }
+
         .episode-card {
             display: flex;
             gap: 16px;
             background-color: var(--bg-surface);
             padding: 12px;
             border-radius: var(--radius-md);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition-fluid);
             cursor: pointer;
         }
+
         .episode-card:hover {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
+
         .episode-thumb {
             width: 140px;
             aspect-ratio: 16/9;
@@ -468,18 +585,21 @@
             object-fit: cover;
             background-color: var(--bg-base);
         }
+
         .episode-info {
             display: flex;
             flex-direction: column;
             justify-content: center;
             flex: 1;
         }
+
         .episode-title {
             font-weight: 600;
             font-size: 1rem;
             margin-bottom: 6px;
             color: var(--text-primary);
         }
+
         .episode-desc {
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -496,33 +616,41 @@
             .movie-container {
                 flex-direction: column;
             }
+
             .info-section {
                 width: 100%;
                 max-width: 800px;
             }
-            .nav-links { display: none; }
+
+            .nav-links {
+                display: none;
+            }
+
             .poster-wrapper {
-                display: none; /* На мобилках постер можно скрыть, так как есть плеер с фоном */
+                display: none;
+                /* На мобилках постер можно скрыть, так как есть плеер с фоном */
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- NAVIGATION (Идентична alko.html) -->
     <nav class="navbar" id="navbar">
         <div class="nav-left">
             <a href="index.html" class="logo">
-                <svg viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 24V0H8.5L14.5 14L20.5 0H29V24H22V9.5L16.5 21H12.5L7 9.5V24H0Z" fill="currentColor"/>
-                </svg>
-                oov
+                M
             </a>
         </div>
         <div class="nav-right">
             <div class="search-container" id="search-container">
                 <div class="search-wrapper">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
                     <input type="text" id="search-input" class="search-input" placeholder="Поиск..." autocomplete="off">
                 </div>
                 <div class="search-dropdown" id="search-dropdown">
@@ -530,7 +658,8 @@
                 </div>
             </div>
             <div class="avatar">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80" alt="User Profile">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80"
+                    alt="User Profile">
             </div>
         </div>
     </nav>
@@ -545,20 +674,46 @@
                 <div class="video-wrapper">
                     <!-- Свечение (Ambilight) -->
                     <div class="player-glow" id="player-glow"></div>
-                    
+
                     <!-- Заглушка для плеера. Сюда в будущем будет стримиться торрент-поток -->
                     <!-- Тестовое открытое видео для демонстрации плеера -->
-                    <video id="movie-player" controls preload="metadata">
-                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" type="video/mp4">
+                    <div id="player-loading" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); color:white; display:flex; justify-content:center; align-items:center; z-index:10; backdrop-filter: blur(4px); transition: opacity 0.3s; border-radius: var(--radius-md);">
+                        <div style="display:flex; flex-direction:column; align-items:center; gap: 12px;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin-anim" style="animation: spin 1s linear infinite;">
+                                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                            </svg>
+                            <span>Загрузка видео...</span>
+                        </div>
+                    </div>
+                    <style>
+                        @keyframes spin { 100% { transform: rotate(360deg); } }
+                    </style>
+                    <video id="movie-player" controls preload="metadata" style="position: relative; z-index: 5;">
                         Ваш браузер не поддерживает HTML5 видео.
                     </video>
                 </div>
                 
+                <!-- Блок управления качеством и озвучкой -->
+                <div class="player-controls" style="display: flex; gap: 16px; margin-top: 16px; margin-bottom: 24px; padding: 16px; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.05); align-items: center;">
+                    <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Настройки плеера:</span>
+                    <select class="season-select" id="translator-selector" style="display: none; flex: 1; max-width: 250px;">
+                        <option value="">Озвучка загружается...</option>
+                    </select>
+                    <div id="tv-section" style="display: none;">
+                        <div style="display: flex; gap: 12px;">
+                            <select id="season-selector" class="season-select" style="flex: 1;"></select>
+                            <select id="episode-selector" class="season-select" style="flex: 1;"></select>
+                        </div>
+                    </div>
+                    <select class="season-select" id="quality-selector" style="display: none; width: 120px;">
+                        <option value="">Качество</option>
+                    </select>
+                </div>
+
                 <!-- БЛОК СЕРИАЛОВ (Скрыт по умолчанию) -->
-                <div class="tv-section" id="tv-section">
+                <div class="tv-section" id="tv-section-legacy" style="display:none;">
                     <div class="tv-header">
                         <h3>Эпизоды</h3>
-                        <select class="season-select" id="season-selector"></select>
                     </div>
                     <div class="episodes-list" id="episodes-list">
                         <!-- Эпизоды загрузятся сюда -->
@@ -572,10 +727,10 @@
                 <div class="poster-wrapper">
                     <img id="movie-poster" src="" alt="Poster">
                 </div>
-                
+
                 <!-- Заголовок -->
                 <h1 class="info-title" id="movie-title">Загрузка...</h1>
-                
+
                 <!-- Метаданные (Год, Рейтинг, Длительность) -->
                 <div class="info-meta">
                     <span id="movie-year">----</span>
@@ -583,7 +738,10 @@
                     <span id="movie-runtime">-- мин</span>
                     <span>•</span>
                     <div class="meta-rating">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
                         <span id="movie-rating">-.-</span>
                     </div>
                 </div>
@@ -609,17 +767,17 @@
     </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Эффект скролла для навигации
-        const navbar = document.getElementById('navbar');
-        if (navbar) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 40) navbar.classList.add('scrolled');
-                else navbar.classList.remove('scrolled');
-            }, { passive: true });
-        }
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Эффект скролла для навигации
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 40) navbar.classList.add('scrolled');
+                    else navbar.classList.remove('scrolled');
+                }, { passive: true });
+            }
 
-        // --- Логика поиска ---
+            // --- Логика поиска ---
             const searchInput = document.getElementById('search-input');
             const searchDropdown = document.getElementById('search-dropdown');
             const searchContainer = document.getElementById('search-container');
@@ -627,9 +785,9 @@
 
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.trim();
-                
+
                 clearTimeout(searchTimeout);
-                
+
                 if (query.length < 2) {
                     searchDropdown.classList.remove('active');
                     return;
@@ -639,29 +797,29 @@
                     try {
                         const response = await fetch(`${BASE_URL}/search/multi?api_key=${API_KEY}&language=ru-RU&query=${encodeURIComponent(query)}&page=1`);
                         const data = await response.json();
-                        
+
                         searchDropdown.innerHTML = '';
-                        
+
                         if (data.results && data.results.length > 0) {
                             // Ограничиваем вывод до 5 результатов
                             data.results.slice(0, 5).forEach(movie => {
-    // 1. Игнорируем людей, если они попали в поиск (актеры/режиссеры)
-    if (movie.media_type === 'person') return;
+                                // 1. Игнорируем людей, если они попали в поиск (актеры/режиссеры)
+                                if (movie.media_type === 'person') return;
 
-    // 2. Определяем правильное название (у сериалов это 'name', у фильмов 'title')
-    const title = movie.title || movie.name || 'Без названия';
-    
-    // 3. Вытаскиваем правильный год (у сериалов 'first_air_date', у фильмов 'release_date')
-    const dateField = movie.release_date || movie.first_air_date;
-    const year = dateField ? dateField.split('-')[0] : '—';
-    
-    // 4. Плейсхолдер для постера
-    const poster = movie.poster_path 
-        ? `${IMG_W500}${movie.poster_path}` 
-        : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI2MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjcyNzJhIi8+PC9zdmc+';
-    
-    // 5. Генерируем ссылку, передавая ID и TYPE контента (movie или tv)
-    searchDropdown.innerHTML += `
+                                // 2. Определяем правильное название (у сериалов это 'name', у фильмов 'title')
+                                const title = movie.title || movie.name || 'Без названия';
+
+                                // 3. Вытаскиваем правильный год (у сериалов 'first_air_date', у фильмов 'release_date')
+                                const dateField = movie.release_date || movie.first_air_date;
+                                const year = dateField ? dateField.split('-')[0] : '—';
+
+                                // 4. Плейсхолдер для постера
+                                const poster = movie.poster_path
+                                    ? `${IMG_W500}${movie.poster_path}`
+                                    : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI2MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjcyNzJhIi8+PC9zdmc+';
+
+                                // 5. Генерируем ссылку, передавая ID и TYPE контента (movie или tv)
+                                searchDropdown.innerHTML += `
         <a href="movie.html?id=${movie.id}&type=${movie.media_type}" class="search-item">
             <img src="${poster}" alt="${title}">
             <div class="search-item-info">
@@ -670,11 +828,11 @@
             </div>
         </a>
     `;
-});
+                            });
                         } else {
                             searchDropdown.innerHTML = `<div class="search-empty">Ничего не найдено</div>`;
                         }
-                        
+
                         searchDropdown.classList.add('active');
                     } catch (error) {
                         console.error('Search error:', error);
@@ -688,7 +846,7 @@
                     searchDropdown.classList.remove('active');
                 }
             });
-            
+
             // Открываем обратно при клике на input (если есть введенный текст)
             searchInput.addEventListener('focus', () => {
                 if (searchInput.value.trim().length >= 2) {
@@ -697,188 +855,386 @@
             });
             // --- Конец логики поиска ---
 
-        // Конфигурация TMDb API
-        const API_KEY = '7539d217b1aa60938af6dacbb3feb31c';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
-        const IMG_ORIGINAL = 'https://image.tmdb.org/t/p/original';
+            // Конфигурация TMDb API
+            const API_KEY = '7539d217b1aa60938af6dacbb3feb31c';
+            const BASE_URL = 'https://api.themoviedb.org/3';
+            const IMG_W500 = 'https://image.tmdb.org/t/p/w500';
+            const IMG_ORIGINAL = 'https://image.tmdb.org/t/p/original';
 
-        // 1. Получение ID из URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const movieId = urlParams.get('id') || '157336'; 
-        const mediaType = urlParams.get('type') || 'tv';
+            // 1. Получение ID из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('id') || '157336';
+            const mediaType = urlParams.get('type') || 'tv';
 
-        // 2. Интеграция TMDb API (Универсальный запрос для фильмов и сериалов)
-        try {
-            const response = await fetch(`${BASE_URL}/${mediaType}/${movieId}?api_key=${API_KEY}&language=ru-RU&append_to_response=credits`);
-            if (!response.ok) throw new Error('Ошибка сети при получении данных');
-            const data = await response.json();
+            // 2. Интеграция TMDb API (Универсальный запрос для фильмов и сериалов)
+            try {
+                const response = await fetch(`${BASE_URL}/${mediaType}/${movieId}?api_key=${API_KEY}&language=ru-RU&append_to_response=credits`);
+                if (!response.ok) throw new Error('Ошибка сети при получении данных');
+                const data = await response.json();
 
-            // Универсальное получение заголовка (у фильмов .title, у сериалов .name)
-            const movieTitle = data.title || data.name || 'Без названия';
-            
-            // 3. Наполнение страницы: Заголовки и Мета
-            document.title = `${movieTitle} | Moov`;
-            
-            const titleEl = document.getElementById('movie-title');
-            if (titleEl) titleEl.textContent = movieTitle;
+                // Универсальное получение заголовка (у фильмов .title, у сериалов .name)
+                const movieTitle = data.title || data.name || 'Без названия';
 
-            // УНИВЕРСАЛЬНЫЙ ГОД ВЫПУСКА: проверяем оба поля (фильм/сериал)
-            const releaseDate = data.release_date || data.first_air_date;
-            const releaseYear = releaseDate ? releaseDate.split('-')[0] : 'Н/Д';
-            const yearEl = document.getElementById('movie-year');
-            if (yearEl) yearEl.textContent = releaseYear;
-            
-            // УНИВЕРСАЛЬНАЯ ДЛИТЕЛЬНОСТЬ: минуты для фильмов, сезоны для сериалов
-            let durationText = 'Н/Д';
-            if (mediaType === 'movie' && data.runtime) {
-                durationText = `${data.runtime} мин`;
-            } else if (mediaType === 'tv' && data.number_of_seasons) {
-                const seasons = data.number_of_seasons;
-                let seasonWord = 'сезонов';
-                // Красивое склонение слова "сезон"
-                if (seasons % 10 === 1 && seasons % 100 !== 11) seasonWord = 'сезон';
-                else if (seasons % 10 >= 2 && seasons % 10 <= 4 && (seasons % 100 < 10 || seasons % 100 >= 20)) seasonWord = 'сезона';
-                
-                durationText = `${seasons} ${seasonWord}`;
-            }
-            const runtimeEl = document.getElementById('movie-runtime');
-            if (runtimeEl) runtimeEl.textContent = durationText;
-            
-            // Рейтинг
-            const ratingEl = document.getElementById('movie-rating');
-            if (ratingEl) ratingEl.textContent = data.vote_average ? data.vote_average.toFixed(1) : 'Н/Д';
+                // 3. Наполнение страницы: Заголовки и Мета
+                document.title = `${movieTitle} | Moov`;
 
-            // Жанры
-            const genresContainer = document.getElementById('movie-genres');
-            if (genresContainer) {
-                if (data.genres && data.genres.length > 0) {
-                    genresContainer.innerHTML = data.genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('');
-                } else {
-                    genresContainer.innerHTML = '';
+                const titleEl = document.getElementById('movie-title');
+                if (titleEl) titleEl.textContent = movieTitle;
+
+                // УНИВЕРСАЛЬНЫЙ ГОД ВЫПУСКА: проверяем оба поля (фильм/сериал)
+                const releaseDate = data.release_date || data.first_air_date;
+                const releaseYear = releaseDate ? releaseDate.split('-')[0] : 'Н/Д';
+                const yearEl = document.getElementById('movie-year');
+                if (yearEl) yearEl.textContent = releaseYear;
+
+                // УНИВЕРСАЛЬНАЯ ДЛИТЕЛЬНОСТЬ: минуты для фильмов, сезоны для сериалов
+                let durationText = 'Н/Д';
+                if (mediaType === 'movie' && data.runtime) {
+                    durationText = `${data.runtime} мин`;
+                } else if (mediaType === 'tv' && data.number_of_seasons) {
+                    const seasons = data.number_of_seasons;
+                    let seasonWord = 'сезонов';
+                    // Красивое склонение слова "сезон"
+                    if (seasons % 10 === 1 && seasons % 100 !== 11) seasonWord = 'сезон';
+                    else if (seasons % 10 >= 2 && seasons % 10 <= 4 && (seasons % 100 < 10 || seasons % 100 >= 20)) seasonWord = 'сезона';
+
+                    durationText = `${seasons} ${seasonWord}`;
                 }
-            }
+                const runtimeEl = document.getElementById('movie-runtime');
+                if (runtimeEl) runtimeEl.textContent = durationText;
 
-            // Описание (Синопсис)
-            const synopsisEl = document.getElementById('movie-synopsis');
-            if (synopsisEl) synopsisEl.textContent = data.overview || 'Описание для данного тайтла отсутствует.';
+                // Рейтинг
+                const ratingEl = document.getElementById('movie-rating');
+                if (ratingEl) ratingEl.textContent = data.vote_average ? data.vote_average.toFixed(1) : 'Н/Д';
 
-            // Постер и фоновые изображения
-            const posterEl = document.getElementById('movie-poster');
-            if (posterEl) {
-                if (data.poster_path) {
-                    posterEl.src = `${IMG_W500}${data.poster_path}`;
-                } else {
-                    posterEl.style.display = 'none';
+                // Жанры
+                const genresContainer = document.getElementById('movie-genres');
+                if (genresContainer) {
+                    if (data.genres && data.genres.length > 0) {
+                        genresContainer.innerHTML = data.genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('');
+                    } else {
+                        genresContainer.innerHTML = '';
+                    }
                 }
-            }
 
-            if (data.backdrop_path) {
-                const backdropUrl = `${IMG_ORIGINAL}${data.backdrop_path}`;
-                
-                const playerEl = document.getElementById('movie-player');
-                if (playerEl) playerEl.setAttribute('poster', backdropUrl);
-                
-                const bgEl = document.getElementById('bg-backdrop');
-                if (bgEl) bgEl.style.backgroundImage = `url('${backdropUrl}')`;
-                
-                const glowEl = document.getElementById('player-glow');
-                if (glowEl) glowEl.style.backgroundImage = `url('${backdropUrl}')`;
-            }
+                // Описание (Синопсис)
+                const synopsisEl = document.getElementById('movie-synopsis');
+                if (synopsisEl) synopsisEl.textContent = data.overview || 'Описание для данного тайтла отсутствует.';
 
-            // Актерский состав (Каст)
-            const castContainer = document.getElementById('movie-cast');
-            if (castContainer) {
-                castContainer.innerHTML = ''; // Очищаем плейсхолдер
+                // Используем сохраненные переменные для истории
+                window.movieTitle = data.title || data.name || 'Без названия';
+                window.posterPath = data.poster_path;
                 
-                if (data.credits && data.credits.cast && data.credits.cast.length > 0) {
-                    const topCast = data.credits.cast.slice(0, 5);
-                    
-                    topCast.forEach(actor => {
-                        const avatarSrc = actor.profile_path 
-                            ? `${IMG_W500}${actor.profile_path}` 
-                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(actor.name)}&background=27272a&color=fff`;
-                            
-                        const li = document.createElement('li');
-                        li.className = 'cast-item';
-                        li.innerHTML = `
+                // Постер и фоновые изображения
+                const posterEl = document.getElementById('movie-poster');
+                if (posterEl) {
+                    if (data.poster_path) {
+                        posterEl.src = `${IMG_W500}${data.poster_path}`;
+                    } else {
+                        posterEl.style.display = 'none';
+                    }
+                }
+
+                if (data.backdrop_path) {
+                    const backdropUrl = `${IMG_ORIGINAL}${data.backdrop_path}`;
+
+                    const playerEl = document.getElementById('movie-player');
+                    if (playerEl) playerEl.setAttribute('poster', backdropUrl);
+
+                    const bgEl = document.getElementById('bg-backdrop');
+                    if (bgEl) bgEl.style.backgroundImage = `url('${backdropUrl}')`;
+
+                    const glowEl = document.getElementById('player-glow');
+                    if (glowEl) glowEl.style.backgroundImage = `url('${backdropUrl}')`;
+                }
+
+                // Актерский состав (Каст)
+                const castContainer = document.getElementById('movie-cast');
+                if (castContainer) {
+                    castContainer.innerHTML = ''; // Очищаем плейсхолдер
+
+                    if (data.credits && data.credits.cast && data.credits.cast.length > 0) {
+                        const topCast = data.credits.cast.slice(0, 5);
+
+                        topCast.forEach(actor => {
+                            const avatarSrc = actor.profile_path
+                                ? `${IMG_W500}${actor.profile_path}`
+                                : `https://ui-avatars.com/api/?name=${encodeURIComponent(actor.name)}&background=27272a&color=fff`;
+
+                            const li = document.createElement('li');
+                            li.className = 'cast-item';
+                            li.innerHTML = `
                             <img src="${avatarSrc}" alt="${actor.name}" class="cast-avatar">
                             <div class="cast-info">
                                 <span class="cast-name">${actor.name}</span>
                                 <span class="cast-char">${actor.character || 'Без роли'}</span>
                             </div>
                         `;
-                        castContainer.appendChild(li);
-                    });
-                } else {
-                    castContainer.innerHTML = '<li class="cast-item"><span class="cast-name">Нет данных об актерах</span></li>';
-                }
-            }
-
-            // 4. Логика для Сериалов (Отображение сезонов и эпизодов)
-            if (mediaType === 'tv' && data.seasons) {
-                const tvSection = document.getElementById('tv-section');
-                const seasonSelector = document.getElementById('season-selector');
-                const episodesList = document.getElementById('episodes-list');
-                
-                if (tvSection && seasonSelector && episodesList) {
-                    tvSection.style.display = 'block'; // Показываем блок эпизодов
-                    
-                    // Убираем "нулевой" сезон (обычно это спецвыпуски)
-                    const validSeasons = data.seasons.filter(s => s.season_number > 0);
-                    
-                    seasonSelector.innerHTML = validSeasons.map(s => 
-                        `<option value="${s.season_number}">${s.name}</option>`
-                    ).join('');
-
-                    // Функция подгрузки эпизодов выбранного сезона
-                    const fetchEpisodes = async (seasonNum) => {
-                        episodesList.innerHTML = '<div style="color: var(--text-muted); padding: 10px;">Загрузка эпизодов...</div>';
-                        try {
-                            const res = await fetch(`${BASE_URL}/tv/${movieId}/season/${seasonNum}?api_key=${API_KEY}&language=ru-RU`);
-                            const seasonData = await res.json();
-                            
-                            if (seasonData.episodes && seasonData.episodes.length > 0) {
-                                episodesList.innerHTML = seasonData.episodes.map(ep => {
-                                    const stillSrc = ep.still_path ? `${IMG_W500}${ep.still_path}` : 'https://placehold.co/160x90/18181b/a1a1aa?text=Нет+кадра';
-                                    return `
-                                        <div class="episode-card">
-                                            <img src="${stillSrc}" alt="Эпизод ${ep.episode_number}" class="episode-thumb">
-                                            <div class="episode-info">
-                                                <div class="episode-title">${ep.episode_number}. ${ep.name}</div>
-                                                <div class="episode-desc">${ep.overview || 'Описание отсутствует.'}</div>
-                                            </div>
-                                        </div>
-                                    `;
-                                }).join('');
-                            } else {
-                                episodesList.innerHTML = '<div style="color: var(--text-muted); padding: 10px;">Эпизоды не найдены.</div>';
-                            }
-                        } catch (e) {
-                            episodesList.innerHTML = '<div style="color: var(--text-muted); padding: 10px;">Ошибка загрузки эпизодов.</div>';
-                        }
-                    };
-
-                    // Слушатель смены сезона
-                    seasonSelector.addEventListener('change', (e) => fetchEpisodes(e.target.value));
-                    
-                    // По умолчанию грузим первый доступный сезон
-                    if (validSeasons.length > 0) {
-                        fetchEpisodes(validSeasons[0].season_number);
+                            castContainer.appendChild(li);
+                        });
+                    } else {
+                        castContainer.innerHTML = '<li class="cast-item"><span class="cast-name">Нет данных об актерах</span></li>';
                     }
                 }
-            }
 
-        } catch (error) {
-            console.error('Ошибка при загрузке данных:', error);
-            const titleEl = document.getElementById('movie-title');
-            if (titleEl) titleEl.textContent = 'Контент не найден';
-            const synopsisEl = document.getElementById('movie-synopsis');
-            if (synopsisEl) synopsisEl.textContent = 'Произошла ошибка при загрузке информации. Пожалуйста, попробуйте позже.';
-            const castContainer = document.getElementById('movie-cast');
-            if (castContainer) castContainer.innerHTML = '';
-        }
-    });
-</script>
+                // 4. Интеграция с HDRezka Backend
+                const REZKA_BACKEND = 'http://127.0.0.1:8000';
+                let currentRezkaUrl = null;
+                let currentTranslators = null;
+                let currentEpisodesInfo = null;
+                let isSeries = mediaType === 'tv';
+                
+                const translatorSelector = document.getElementById('translator-selector');
+                const qualitySelector = document.getElementById('quality-selector');
+                const tvSection = document.getElementById('tv-section');
+                const seasonSelector = document.getElementById('season-selector');
+                const episodeSelector = document.getElementById('episode-selector');
+                const player = document.getElementById('movie-player');
+                
+                let hls = null;
+
+                const loadVideo = (url) => {
+                    const loadingIndicator = document.getElementById('player-loading');
+                    if (Hls.isSupported() && url.includes('.m3u8')) {
+                        if (hls) hls.destroy();
+                        hls = new Hls();
+                        hls.loadSource(url);
+                        hls.attachMedia(player);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            loadingIndicator.style.display = 'none';
+                            player.play().catch(e => console.log('Autoplay blocked'));
+                        });
+                    } else {
+                        if (hls) hls.destroy();
+                        player.src = url;
+                        player.onloadeddata = () => {
+                            loadingIndicator.style.display = 'none';
+                        };
+                        player.play().catch(e => {
+                            console.log('Autoplay blocked');
+                            loadingIndicator.style.display = 'none';
+                        });
+                    }
+                };
+
+                let preferredQuality = null;
+
+                const fetchStream = async (season, episode, translatorId) => {
+                    if (!currentRezkaUrl) return;
+                    const loadingIndicator = document.getElementById('player-loading');
+                    loadingIndicator.style.display = 'flex';
+                    
+                    let url = `${REZKA_BACKEND}/api/stream?url=${encodeURIComponent(currentRezkaUrl)}`;
+                    if (translatorId) url += `&translator_id=${translatorId}`;
+                    if (season && episode) url += `&season=${season}&episode=${episode}`;
+                    
+                    try {
+                        const res = await fetch(url);
+                        const data = await res.json();
+                        
+                        // Сохранение истории (сериал)
+                        if (season && episode) {
+                            const savedHistory = JSON.parse(localStorage.getItem('watchHistory') || '[]');
+                            const existingIndex = savedHistory.findIndex(h => h.id == movieId);
+                            const historyItem = {
+                                id: movieId,
+                                type: mediaType,
+                                title: movieTitle,
+                                poster: posterPath ? `${IMG_W500}${posterPath}` : 'https://placehold.co/160x90/18181b/a1a1aa?text=Нет+кадра',
+                                lastVoiceoverId: translatorId,
+                                lastSeason: season,
+                                lastEpisode: episode,
+                                timestamp: Date.now()
+                            };
+                            if (existingIndex > -1) savedHistory.splice(existingIndex, 1);
+                            savedHistory.unshift(historyItem);
+                            localStorage.setItem('watchHistory', JSON.stringify(savedHistory));
+                        }
+
+                        if (data.success && data.streams) {
+                            qualitySelector.style.display = 'block';
+                            
+                            const validQualities = Object.keys(data.streams).filter(q => {
+                                const qs = q.toLowerCase();
+                                return !qs.includes('ultra') && !qs.includes('1440') && !qs.includes('2160') && !qs.includes('4k');
+                            });
+                            
+                            qualitySelector.innerHTML = validQualities.map(q => `<option value="${data.streams[q]}">${q}</option>`).join('');
+                            
+                            // Load preferred quality or highest by default
+                            let selectedValue = null;
+                            if (preferredQuality && data.streams[preferredQuality]) {
+                                selectedValue = data.streams[preferredQuality];
+                            } else if (validQualities.length > 0) {
+                                selectedValue = data.streams[validQualities[validQualities.length - 1]];
+                            }
+                            
+                            if (selectedValue) {
+                                qualitySelector.value = selectedValue;
+                                loadVideo(selectedValue);
+                            } else {
+                                loadingIndicator.style.display = 'none';
+                            }
+                        } else {
+                            loadingIndicator.style.display = 'none';
+                            document.getElementById('movie-player').innerHTML = `
+                                <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md);">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 12px; opacity: 0.5;">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: white;">Видео недоступно</div>
+                                    <div style="font-size: 0.875rem; margin-top: 4px; text-align: center; max-width: 80%;">${data.error || 'К сожалению, это видео сейчас недоступно.'}</div>
+                                </div>
+                            `;
+                        }
+                    } catch (err) {
+                        console.error('Stream load error', err);
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+
+                // Handle quality change
+                qualitySelector.addEventListener('change', (e) => {
+                    preferredQuality = e.target.options[e.target.selectedIndex].text;
+                    const loadingIndicator = document.getElementById('player-loading');
+                    loadingIndicator.style.display = 'flex';
+                    loadVideo(e.target.value);
+                });
+
+                try {
+                    // Ищем на Резке
+                    const searchRes = await fetch(`${REZKA_BACKEND}/api/search_rezka?title=${encodeURIComponent(movieTitle)}&year=${releaseYear}`);
+                    const searchData = await searchRes.json();
+                    
+                    if (searchData.success) {
+                        currentRezkaUrl = searchData.url;
+                        
+                        // Получаем инфо (озвучки, сезоны)
+                        const infoRes = await fetch(`${REZKA_BACKEND}/api/info?url=${encodeURIComponent(currentRezkaUrl)}`);
+                        const infoData = await infoRes.json();
+                        
+                        if (infoData.success) {
+                            currentTranslators = infoData.translators;
+                            currentEpisodesInfo = infoData.episodesInfo;
+                            
+                            // Заполняем озвучки
+                            if (currentTranslators && Object.keys(currentTranslators).length > 0) {
+                                translatorSelector.style.display = 'block';
+                                translatorSelector.innerHTML = Object.keys(currentTranslators).map(id => 
+                                    `<option value="${id}">${currentTranslators[id].name}</option>`
+                                ).join('');
+                            }
+
+                            if (!isSeries) {
+                                // Фильм: просто грузим стрим с первой озвучкой
+                                const tId = translatorSelector.options.length > 0 ? translatorSelector.value : null;
+                                fetchStream(null, null, tId);
+                                
+                                translatorSelector.addEventListener('change', (e) => fetchStream(null, null, e.target.value));
+                            } else {
+                                // Сериал
+                                tvSection.style.display = 'block';
+                                
+                                if (currentEpisodesInfo && currentEpisodesInfo.length > 0 && data.seasons) {
+                                    // Используем сезоны из HDRezka
+                                    seasonSelector.innerHTML = currentEpisodesInfo.map(s => 
+                                        `<option value="${s.season}">${s.season_text || 'Сезон ' + s.season}</option>`
+                                    ).join('');
+                                    
+                                    let currentS = currentEpisodesInfo[0].season;
+                                    let currentE = 1;
+
+                                    // Восстанавливаем состояние из localStorage
+                                    const savedHistory = JSON.parse(localStorage.getItem('watchHistory') || '[]');
+                                    const currentMovieHistory = savedHistory.find(h => h.id == movieId);
+                                    if (currentMovieHistory) {
+                                        if (currentMovieHistory.lastSeason) currentS = currentMovieHistory.lastSeason;
+                                        if (currentMovieHistory.lastEpisode) currentE = currentMovieHistory.lastEpisode;
+                                        if (currentMovieHistory.lastVoiceoverId && document.querySelector(`#translator-selector option[value="${currentMovieHistory.lastVoiceoverId}"]`)) {
+                                            translatorSelector.value = currentMovieHistory.lastVoiceoverId;
+                                        }
+                                        seasonSelector.value = currentS;
+                                    }
+                                    
+                                    const renderEpisodes = async (seasonNum) => {
+                                        try {
+                                            const rezkaSeason = currentEpisodesInfo.find(s => s.season == seasonNum);
+                                            
+                                            if (rezkaSeason && rezkaSeason.episodes && rezkaSeason.episodes.length > 0) {
+                                                episodeSelector.innerHTML = rezkaSeason.episodes.map(ep => {
+                                                    const isSelected = ep.episode == currentE ? 'selected' : '';
+                                                    return `<option value="${ep.episode}" ${isSelected}>${ep.episode_text || 'Серия ' + ep.episode}</option>`;
+                                                }).join('');
+                                                
+                                                if (!rezkaSeason.episodes.find(ep => ep.episode == currentE)) {
+                                                    currentE = rezkaSeason.episodes[0].episode;
+                                                    episodeSelector.value = currentE;
+                                                }
+                                            } else {
+                                                episodeSelector.innerHTML = '<option value="">Нет серий</option>';
+                                            }
+                                        } catch (e) {
+                                            console.error('Ошибка загрузки эпизодов:', e);
+                                        }
+                                    };
+                                    
+                                    seasonSelector.addEventListener('change', (e) => {
+                                        currentS = e.target.value;
+                                        // При смене сезона сбрасываем на 1 серию
+                                        currentE = 1; 
+                                        renderEpisodes(currentS);
+                                        fetchStream(currentS, currentE, translatorSelector.value);
+                                    });
+                                    
+                                    translatorSelector.addEventListener('change', () => {
+                                        fetchStream(currentS, currentE, translatorSelector.value);
+                                    });
+                                    
+                                    // Init first episode
+                                    renderEpisodes(currentS);
+                                    fetchStream(currentS, currentE, translatorSelector.value);
+                                }
+                            }
+                            
+                            // Сохраняем фильм в историю (одиночный фильм)
+                            if (!isSeries && currentRezkaUrl) {
+                                const savedHistory = JSON.parse(localStorage.getItem('watchHistory') || '[]');
+                                const existingIndex = savedHistory.findIndex(h => h.id == movieId);
+                                const historyItem = {
+                                    id: movieId,
+                                    type: mediaType,
+                                    title: movieTitle,
+                                    poster: posterPath ? `${IMG_W500}${posterPath}` : 'https://placehold.co/160x90/18181b/a1a1aa?text=Нет+кадра',
+                                    lastVoiceoverId: translatorSelector.value,
+                                    lastSeason: null,
+                                    lastEpisode: null,
+                                    timestamp: Date.now()
+                                };
+                                if (existingIndex > -1) savedHistory.splice(existingIndex, 1);
+                                savedHistory.unshift(historyItem);
+                                localStorage.setItem('watchHistory', JSON.stringify(savedHistory));
+                            }
+                        }
+                    } else {
+                        console.log('Не найдено на HDRezka');
+                    }
+                } catch(e) {
+                    console.error('Ошибка бэкенда Резки', e);
+                }
+
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error);
+                const titleEl = document.getElementById('movie-title');
+                if (titleEl) titleEl.textContent = 'Контент не найден';
+                const synopsisEl = document.getElementById('movie-synopsis');
+                if (synopsisEl) synopsisEl.textContent = 'Произошла ошибка при загрузке информации. Пожалуйста, попробуйте позже.';
+                const castContainer = document.getElementById('movie-cast');
+                if (castContainer) castContainer.innerHTML = '';
+            }
+        });
+    </script>
 </body>
+
 </html>
